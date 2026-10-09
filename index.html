@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Kenangan 3D - Sahabat Selamanya</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #2c2522;
+            color: #4a4543;
+            overflow: hidden;
+        }
+        .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Styling Buku 3D */
+        .book-container {
+            perspective: 1500px;
+        }
+        .book {
+            width: 90vw;
+            max-width: 900px;
+            height: 550px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .page {
+            width: 50%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            background-color: #fdfbf7;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+            backface-visibility: hidden;
+            overflow: hidden;
+        }
+        .page.left {
+            left: 0;
+            transform-origin: right center;
+        }
+        .page-content {
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        /* Efek Halaman Terbalik */
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        /* Kustomisasi Tampilan Kertas */
+        .paper-texture {
+            background-color: #fcf9f2;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0) 5%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between items-center select-none">
+
+    <!-- HEADER / NAVIGASI ATAS -->
+    <header class="w-full py-4 px-8 flex justify-between items-center text-white bg-black/20 backdrop-blur-md">
+        <div class="serif-font text-xl font-bold tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-book-open text-rose-300"></i> Buku Kenangan Kita
+        </div>
+        <div class="text-xs tracking-widest uppercase bg-white/10 px-4 py-1.5 rounded-full border border-white/20">
+            Gunakan Tombol di Bawah untuk Membalik Halaman
+        </div>
+        <button onclick="toggleMusic()" id="musicBtn" class="bg-rose-500/80 hover:bg-rose-500 text-white px-4 py-2 rounded-full text-xs flex items-center gap-2 transition cursor-pointer">
+            <i class="fa-solid fa-music" id="musicIcon"></i> <span id="musicLabel">Musik</span>
+        </button>
+    </header>
+
+    <!-- KONTEN UTAMA BUKU 3D -->
+    <main class="flex-grow flex flex-col justify-center items-center py-4">
+        <div class="book-container">
+            <div class="book" id="book">
+                
+                <!-- HALAMAN 1 (COVER DEPAN) -->
+                <div class="page" id="p1" style="z-index: 5;">
+                    <div class="page-content paper-texture bg-stone-900 text-white text-center justify-center items-center relative shadow-2xl">
+                        <div class="absolute inset-4 border border-white/20 pointer-events-none"></div>
+                        <span class="text-xs uppercase tracking-widest text-rose-300 mb-2">Yearbook 2026</span>
+                        <h1 class="serif-font text-4xl font-bold mb-4">Our Sweet Memories</h1>
+                        <p class="text-stone-300 text-sm font-light max-w-xs italic">"Kumpulan kisah, tawa, dan memori indah persahabatan kita berlima."</p>
+                        <div class="mt-8">
+                            <span class="inline-block bg-white/10 text-stone-300 text-xs px-4 py-2 rounded-full border border-white/10">Ketuk "Buka Buku" di bawah</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HALAMAN 2 (SAMBUTAN / KATA PENGANTAR) -->
+                <div class="page" id="p2" style="z-index: 4;">
+                    <div class="page-content paper-texture border-r border-stone-200">
+                        <div>
+                            <h2 class="serif-font text-2xl font-bold text-stone-800 mb-2 border-b pb-2">Kata Pengantar</h2>
+                            <p class="text-stone-600 text-xs leading-relaxed mt-4">
+                                Halaman demi halaman di buku ini merekam momen berharga saat kita bersama. Suka dan duka yang kita lewati membentuk ikatan yang takkan lekang oleh waktu.
+                            </p>
+                        </div>
+                        <div class="rounded-xl overflow-hidden shadow-md h-48 border border-stone-200">
+                            <img src="1000196945.jpg" alt="Kenangan" class="w-full h-full object-cover">
+                        </div>
+                        <div class="text-right text-[10px] text-stone-400">Hal. 2</div>
+                    </div>
+                </div>
+
+                <!-- HALAMAN 3 (GALERI FOTO KESERUAN) -->
+                <div class="page" id="p3" style="z-index: 3;">
+                    <div class="page-content paper-texture border-r border-stone-200">
+                        <div>
+                            <h2 class="serif-font text-2xl font-bold text-stone-800 mb-2 border-b pb-2">Galeri Kehebohan</h2>
+                            <p class="text-stone-600 text-xs mb-3">Ekspresi natural tanpa jaim di balik kamera.</p>
+                        </div>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="overflow-hidden rounded-lg shadow-sm h-40 border border-stone-200">
+                                <img src="1000196961.jpg" alt="Galeri 1" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                        <div class="text-right text-[10px] text-stone-400">Hal. 3</div>
+                    </div>
+                </div>
+
+                <!-- HALAMAN 4 (PROFIL SAHABAT) -->
+                <div class="page" id="p4" style="z-index: 2;">
+                    <div class="page-content paper-texture border-r border-stone-200">
+                        <div>
+                            <h2 class="serif-font text-2xl font-bold text-stone-800 mb-2 border-b pb-2">Kelima Sahabat</h2>
+                            <ul class="text-xs text-stone-600 space-y-2 mt-4">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-heart text-rose-400"></i> Sahabat 1: Si Paling Ceria</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-heart text-rose-400"></i> Sahabat 2: Bendahara & Penasehat</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-heart text-rose-400"></i> Sahabat 3: Si Kreatif & Idealis</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-heart text-rose-400"></i> Sahabat 4: Penyemangat & Humoris</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-heart text-rose-400"></i> Sahabat 5: Si Perasa & Setia</li>
+                            </ul>
+                        </div>
+                        <div class="text-right text-[10px] text-stone-400">Hal. 4</div>
+                    </div>
+                </div>
+
+                <!-- HALAMAN 5 (COVER BELAKANG / PENUTUP) -->
+                <div class="page" id="p5" style="z-index: 1;">
+                    <div class="page-content paper-texture bg-stone-900 text-white text-center justify-center items-center shadow-2xl">
+                        <h2 class="serif-font text-3xl font-bold mb-3 text-rose-300">Terima Kasih</h2>
+                        <p class="text-stone-300 text-xs font-light max-w-xs mb-6">"Sampai jumpa di kesuksesan kita di masa depan. Persahabatan ini abadi selamanya."</p>
+                        <span class="text-[10px] tracking-widest text-stone-500 uppercase">The End • 2026</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- KONTROL NAVIGASI HALAMAN (TOMBOL NEXT / PREV) -->
+    <footer class="w-full py-5 bg-black/20 backdrop-blur-md flex justify-center items-center gap-6">
+        <button onclick="prevPage()" id="prevBtn" class="bg-white/10 hover:bg-white/20 text-white px-6 py-2.5 rounded-full text-xs font-medium transition flex items-center gap-2 disabled:opacity-30 cursor-pointer">
+            <i class="fa-solid fa-arrow-left"></i> Sebelumnya
+        </button>
+        <span id="pageIndicator" class="text-white text-xs font-medium tracking-wider">Halaman 1 dari 5</span>
+        <button onclick="nextPage()" id="nextBtn" class="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2.5 rounded-full text-xs font-medium transition flex items-center gap-2 cursor-pointer">
+            Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </footer>
+
+    <!-- AUDIO LATAR -->
+    <audio id="bgMusic" loop>
+        <source src="https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg" type="audio/ogg">
+    </audio>
+
+    <!-- SCRIPT LOGIKA Buku 3D -->
+    <script>
+        let currentLocation = 1;
+        let maxPage = 5;
+        let isPlaying = false;
+
+        const p1 = document.getElementById('p1');
+        const p2 = document.getElementById('p2');
+        const p3 = document.getElementById('p3');
+        const p4 = document.getElementById('p4');
+        const p5 = document.getElementById('p5');
+
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentLocation === 1;
+            document.getElementById('nextBtn').disabled = currentLocation === maxPage;
+            document.getElementById('pageIndicator.textContent = `Halaman ${currentLocation} dari ${maxPage}`;
+        }
+
+        function nextPage() {
+            if (currentLocation < maxPage) {
+                if (currentLocation === 1) p1.classList.add('flipped');
+                if (currentLocation === 2) p2.classList.add('flipped');
+                if (currentLocation === 3) p3.classList.add('flipped');
+                if (currentLocation === 4) p4.classList.add('flipped');
+                
+                currentLocation++;
+                document.getElementById('pageIndicator').textContent = `Halaman ${currentLocation} dari ${maxPage}`;
+                document.getElementById('prevBtn').disabled = false;
+                if (currentLocation === maxPage) {
+                    document.getElementById('nextBtn').disabled = true;
+                }
+            }
+        }
+
+        function prevPage() {
+            if (currentLocation > 1) {
+                currentLocation--;
+                if (currentLocation === 1) p1.classList.remove('flipped');
+                if (currentLocation === 2) p2.classList.remove('flipped');
+                if (currentLocation === 3) p3.classList.remove('flipped');
+                if (currentLocation === 4) p4.classList.remove('flipped');
+
+                document.getElementById('pageIndicator').textContent = `Halaman ${currentLocation} dari ${maxPage}`;
+                document.getElementById('nextBtn').disabled = false;
+                if (currentLocation === 1) {
+                    document.getElementById('prevBtn').disabled = true;
+                }
+            }
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const icon = document.getElementById('musicIcon');
+            const label = document.getElementById('musicLabel');
+            if (isPlaying) {
+                music.pause();
+                icon.className = "fa-solid fa-music";
+                label.textContent = "Musik";
+            } else {
+                music.play().catch(e => alert("Ketuk sekali lagi untuk memutar musik."));
+                icon.className = "fa-solid fa-pause";
+                label.textContent = "Jeda";
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Inisialisasi tombol awal
+        document.getElementById('prevBtn').disabled = true;
+    </script>
+</body>
+</html>
